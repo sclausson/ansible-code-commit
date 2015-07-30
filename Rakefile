@@ -1,17 +1,14 @@
 require 'rake'
 require 'rspec/core/rake_task'
+require 'aws-sdk-v1'
 
 task :spec    => 'spec:all'
 task :default => :spec
 
 namespace :spec do
-  targets = []
-  Dir.glob('./spec/*').each do |dir|
-    next unless File.directory?(dir)
-    target = File.basename(dir)
-    target = "_#{target}" if target == "default"
-    targets << target
-  end
+  ec2 = AWS::EC2.new
+  instances = ec2.instances.with_tag("role","build-slave")
+  targets = instances.collect { |i| i.public_ip_address }
 
   task :all     => targets
   task :default => :all
@@ -21,7 +18,7 @@ namespace :spec do
     desc "Run serverspec tests to #{original_target}"
     RSpec::Core::RakeTask.new(target.to_sym) do |t|
       ENV['TARGET_HOST'] = original_target
-      t.pattern = "spec/#{original_target}/*_spec.rb"
+      t.pattern = "spec/*_spec.rb"
     end
   end
 end
