@@ -1,0 +1,32 @@
+- name: Test out code commit stuff
+  hosts: tag_role_build_slave
+  vars:
+    ssh_pub_key_id: APKAJJXESLIAPY7RHHOA
+  gather_facts: False
+  sudo: True
+  tasks:
+    - name: copy private key used to access code commit repo over SSH
+      s3: >
+        bucket=cc-test-resources
+        object=cc_ssh_user.pem
+        dest=~/.ssh/cc_ssh_user.pem
+        mode=get
+    - name: set ssh private key mode to owner read
+      file: path=~/.ssh/cc_ssh_user.pem mode=0400
+    - name: create ssh config file
+      template: >
+        src=./templates/ssh-config
+        dest=~/.ssh/config
+        owner=root
+        group=root
+        mode=0644
+    - name: add Code Commit server in us-east-1 (only supported region) to SSH known_hosts
+      shell: ssh-keyscan git-codecommit.us-east-1.amazonaws.com >> ~/.ssh/known_hosts
+    - name: install git package
+      yum: name=git state=latest
+    - name: update to latest AWS CLI tools
+      shell: pip install --upgrade awscli
+    - name: git clone hello-world repo
+      git: >
+        repo=ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/HelloWorld
+        dest=/srv/git/repos/hello-world

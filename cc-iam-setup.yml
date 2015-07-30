@@ -1,0 +1,47 @@
+- name: create requisite Code Commit IAM resources
+  hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: create an IAM group
+      iam:
+        iam_type: group
+        name: CodeCommitPushPullGroup
+        state: present
+      register: new_group
+    - name: create an IAM user
+      iam:
+        iam_type: user
+        name: CodeCommitPushPullUser
+        state: present
+        groups: CodeCommitPushPullGroup
+    - name: create IAM role
+      iam: 
+        iam_type: role
+        name: CodeCommitPushPullRole
+        state: present
+    - name: create inline IAM policy and attach to Group created above
+      iam_policy: 
+        iam_type: group
+        iam_name: CodeCommitPushPullGroup
+        policy_name: CodeCommitPushPullPolicy
+        policy_document: ./files/cc-push-pull-policy.json
+        state: present
+    - name: create inline IAM policy and attach to Role created above
+      iam_policy: 
+        iam_type: role
+        iam_name: CodeCommitPushPullRole
+        policy_name: CodeCommitPushPullPolicy
+        policy_document: ./files/cc-push-pull-policy.json
+        state: present
+    - name: create inline IAM policy and attach to Role created above
+      iam_policy: 
+        iam_type: role
+        iam_name: CodeCommitPushPullRole
+        policy_name: S3ResourcesBucketPolicy
+        policy_document: ./files/s3-get-object-policy.json
+        state: present
+    - name: upload public SSH key for CodeCommitPushPullUser
+      shell: "aws iam upload-ssh-public-key --ssh-public-key-body file://./files/cc_ssh_user.pub --user-name CodeCommitPushPullUser --query 'SSHPublicKey.{ID:SSHPublicKeyId}' --output text"
+      register: upload_result
+    - name: set_fact for ssh public key id
+      set_fact: ssh_pub_key_id="{{ upload_result.stdout }}"
