@@ -1,0 +1,9 @@
+- name: Refersh the inventory cache
+  hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: Updating now...
+      command: /etc/ansible/hosts/ec2.py --refresh-cache
+      register: cache
+    - name: print debug output
+      debug: var=cache

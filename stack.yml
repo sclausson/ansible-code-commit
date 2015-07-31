@@ -1,2 +1,3 @@
 - include: cc-ec2-launch.yml
+- include: refresh-cache.yml
 - include: cc-ec2-client.yml
