@@ -19,7 +19,7 @@ describe package('git') do
 end
 
 describe command('aws --version') do
-  its(:stdout) { should contain('aws-cli/1.7./[4-9][0-9]/') }
+  its(:stdout) { should contain('aws-cli/1./[7-9]/./[4-9][0-9]/') }
 end
 
 describe file('/srv/git/repos/hello-world/hello.txt') do
