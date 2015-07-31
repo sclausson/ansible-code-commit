@@ -7,7 +7,7 @@ task :default => :spec
 
 namespace :spec do
   ec2 = AWS::EC2.new
-  instances = ec2.instances.with_tag("role","build-slave")
+  instances = ec2.instances.with_tag("role","builder")
   targets = instances.collect { |i| i.public_ip_address }
 
   task :all     => targets

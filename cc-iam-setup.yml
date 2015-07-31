@@ -43,5 +43,7 @@
     - name: upload public SSH key for CodeCommitPushPullUser
       shell: "aws iam upload-ssh-public-key --ssh-public-key-body file://./files/cc_ssh_user.pub --user-name CodeCommitPushPullUser --query 'SSHPublicKey.{ID:SSHPublicKeyId}' --output text"
       register: upload_result
+    - name: debug upload upload_result
+      debug: var=upload_result
     - name: set_fact for ssh public key id
       set_fact: ssh_pub_key_id="{{ upload_result.stdout }}"

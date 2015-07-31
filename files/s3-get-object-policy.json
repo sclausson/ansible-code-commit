@@ -4,12 +4,12 @@
     {
       "Effect": "Allow",
       "Action": ["s3:ListBucket"],
-      "Resource": ["arn:aws:s3:::cc-test-resources"]
+      "Resource": ["arn:aws:s3:::stelligent-pem-files"]
     },
     {
       "Effect": "Allow",
       "Action": ["s3:GetObject"],
-      "Resource": ["arn:aws:s3:::cc-test-resources/*"]
+      "Resource": ["arn:aws:s3:::stelligent-pem-files/cc_ssh_user.pem"]
     }
   ]
 }

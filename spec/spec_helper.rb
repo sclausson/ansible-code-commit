@@ -20,7 +20,7 @@ options = Net::SSH::Config.for(host)
 
 options[:user] ||= "ec2-user"
 options[:port] = 22
-options[:keys] = "~/personal/jenkins.pem"
+options[:keys] = "~/personal/shayne-labs.pem"
 options[:host_name] = host
 
 set :host,        options[:host_name] || host

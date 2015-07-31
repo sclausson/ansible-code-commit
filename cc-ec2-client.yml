@@ -1,13 +1,15 @@
 - name: Test out code commit stuff
-  hosts: tag_role_build_slave
+  hosts: tag_role_builder
   vars:
-    ssh_pub_key_id: APKAJJXESLIAPY7RHHOA
+    ssh_pub_key_id: APKAJZRGXUTBEXCZFG5Q
   gather_facts: False
   sudo: True
   tasks:
+    - name: wait for SSH to become available
+      wait_for: port=22 timeout=300 state=started
     - name: copy private key used to access code commit repo over SSH
       s3:
-        bucket: cc-test-resources
+        bucket: stelligent-pem-files
         object: cc_ssh_user.pem
         dest: ~/.ssh/cc_ssh_user.pem
         mode: get

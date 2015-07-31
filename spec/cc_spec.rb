@@ -7,7 +7,7 @@ end
 
 describe file('/root/.ssh/config') do 
   it { should exist }
-  it { should contain 'User APKAJJXESLIAPY7RHHOA'}
+  it { should contain 'User APKAJZRGXUTBEXCZFG5Q'}
 end
 
 describe command('ssh-keygen -H -F git-codecommit.us-east-1.amazonaws.com') do
@@ -19,7 +19,7 @@ describe package('git') do
 end
 
 describe command('aws --version') do
-  its(:stdout) { should contain('aws-cli/1.7.41') }
+  its(:stdout) { should contain('aws-cli/1.7./[4-9][0-9]/') }
 end
 
 describe file('/srv/git/repos/hello-world/hello.txt') do

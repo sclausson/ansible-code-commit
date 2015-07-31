@@ -5,14 +5,14 @@
       ec2:
         region: us-east-1
         image: ami-1ecae776
-        key_name: jenkins
-        group: open-ssh
+        key_name: shayne-labs
+        group: inbound-ssh
         instance_profile_name: CodeCommitPushPullRole
         instance_type: t2.micro
         wait: yes
         instance_tags:
-          role: build-slave
+          role: builder
         count: 1
-        vpc_subnet_id: subnet-637bcb48
+        vpc_subnet_id: subnet-4013507a
         assign_public_ip: True
       register: ec2

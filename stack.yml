@@ -1,0 +1,2 @@
+- include: cc-ec2-launch.yml
+- include: cc-ec2-client.yml
